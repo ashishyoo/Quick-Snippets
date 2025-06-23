@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FormData } from "@/types/form";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "@/types/form.schema";
 import { useRouter } from "next/navigation";
+import { FormData } from "@/types/form";
+import useSnippetStore from "@/state/store";
+import { nanoid } from "nanoid";
+import { saveToLocal } from "@/utils/localStorage";
 
 const CreateSnippet = () => {
   const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -18,14 +20,23 @@ const CreateSnippet = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    reset();
-  };
+  const { snippets, addSnippet } = useSnippetStore();
 
   const handleViewSnippet = () => {
     router.push("/snippets");
   };
+
+  const handleCreateSnippet: SubmitHandler<FormData> = (data) => {
+    const newSnippet = {
+      id: nanoid(),
+      data,
+    };
+    console.log(newSnippet);
+    addSnippet(newSnippet);
+    reset();
+  };
+
+  useEffect(() => saveToLocal(snippets), [snippets]);
 
   return (
     <div>
@@ -41,7 +52,10 @@ const CreateSnippet = () => {
       >
         View Snippets
       </Button>
-      <form onSubmit={handleSubmit(onSubmit)} className="p-4 w-xl relative">
+      <form
+        onSubmit={handleSubmit(handleCreateSnippet)}
+        className="p-4 w-xl relative"
+      >
         <Typography variant="h3" className="pb-6">
           Quick Snippets
         </Typography>
