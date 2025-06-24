@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import {
   Stack,
   TextField,
@@ -19,11 +20,14 @@ import {
 
 const SnippetDetail = () => {
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const readOnlyParam = searchParams.get("readOnly") !== "false";
+
   const router = useRouter();
   const { snippets, updateSnippet } = useSnippetStore();
   const snippet = snippets.find((snippet) => snippet.id === id);
 
-  const [readOnly, setReadOnly] = useState(true);
+  const [readOnly, setReadOnly] = useState(readOnlyParam);
 
   const handleCreateSnippet = () => {
     router.push("/");
@@ -43,6 +47,7 @@ const SnippetDetail = () => {
       snippet: snippet?.data.snippet,
     },
     resolver: zodResolver(schema),
+    mode: "onChange",
   });
 
   const handleUpdateSnippet: SubmitHandler<FormData> = (data) => {
@@ -66,12 +71,8 @@ const SnippetDetail = () => {
 
   return (
     <div className="w-xl">
-      <div className="absolute top-4 right-4 flex gap-2">
-        <Button
-          variant="contained"
-          onClick={handleCreateSnippet}
-          className="z-10"
-        >
+      <div className="absolute top-3 right-3 flex gap-2">
+        <Button variant="contained" onClick={handleCreateSnippet}>
           Create Snippet
         </Button>
         <Button variant="contained" onClick={handleBackSnippet}>

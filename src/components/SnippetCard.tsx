@@ -1,5 +1,6 @@
+"use client";
+
 import {
-  memo,
   Card,
   CardActionArea,
   CardContent,
@@ -17,8 +18,8 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     id,
     data: { name },
   } = snippet;
-  const { removeSnippet } = useSnippetStore();
 
+  const { removeSnippet } = useSnippetStore();
   const router = useRouter();
 
   const handleRemove = (deleteId: string) => {
@@ -29,10 +30,16 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     router.push(`/snippets/${cardId}`);
   };
 
+  const handleEdit = (cardId: string) => {
+    const readOnly = false;
+    const url = `/snippets/${cardId}?readOnly=${readOnly.toString()}`;
+    router.push(url);
+  };
+
   useLocalStorage();
 
   return (
-    <Card sx={{ maxWidth: 600 }}>
+    <Card className="w-full">
       <CardActionArea onClick={() => handleCardClick(id)}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -44,9 +51,12 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
         <Button size="small" color="error" onClick={() => handleRemove(id)}>
           Remove
         </Button>
+        <Button size="small" color="primary" onClick={() => handleEdit(id)}>
+          Edit
+        </Button>
       </CardActions>
     </Card>
   );
 };
 
-export default memo(SnippetCard);
+export default SnippetCard;
