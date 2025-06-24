@@ -1,3 +1,5 @@
+"use client";
+
 import useSnippetStore from "@/state/store";
 import { saveToLocal } from "@/utils/localStorage";
 import { useEffect } from "react";

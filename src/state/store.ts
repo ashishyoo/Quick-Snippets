@@ -1,6 +1,14 @@
 import { Snippet } from "@/types/snippet";
 import { create } from "zustand";
 
+const getLocalSnippets = (): Snippet[] => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    const storedSnippets = localStorage.getItem("snippets");
+    return storedSnippets ? JSON.parse(storedSnippets) : [];
+  }
+  return [];
+};
+
 interface SnippetState {
   snippets: Snippet[];
   addSnippet: (snippet: Snippet) => void;
@@ -8,10 +16,8 @@ interface SnippetState {
   updateSnippet: (updatedSnippet: Snippet) => void;
 }
 
-const localSnippets = localStorage.getItem("snippets");
-
 const useSnippetStore = create<SnippetState>((set) => ({
-  snippets: localSnippets ? JSON.parse(localSnippets) : [],
+  snippets: getLocalSnippets(),
   addSnippet: (snippet) =>
     set((state) => ({ snippets: [...state.snippets, snippet] })),
   removeSnippet: (snippetId) =>
