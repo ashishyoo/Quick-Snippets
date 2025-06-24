@@ -1,55 +1,117 @@
 "use client";
 
-import useSnippetStore from "@/state/store";
-import { TextField, Stack, Button } from "@mui/material";
-import { useParams, useRouter } from "next/navigation";
-import React from "react";
+import {
+  Stack,
+  TextField,
+  useSnippetStore,
+  useRouter,
+  useLocalStorage,
+  useForm,
+  zodResolver,
+  schema,
+  SubmitHandler,
+  Snippet,
+  FormData,
+  useParams,
+  useState,
+  Button,
+} from "./index";
 
 const SnippetDetail = () => {
   const { id } = useParams();
   const router = useRouter();
-  const { snippets } = useSnippetStore();
+  const { snippets, updateSnippet } = useSnippetStore();
   const snippet = snippets.find((snippet) => snippet.id === id);
-  console.log(snippet);
+
+  const [readOnly, setReadOnly] = useState(true);
+
+  const handleCreateSnippet = () => {
+    router.push("/");
+  };
 
   const handleBackSnippet = () => {
     router.back();
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormData>({
+    defaultValues: {
+      name: snippet?.data.name,
+      snippet: snippet?.data.snippet,
+    },
+    resolver: zodResolver(schema),
+  });
+
+  const handleUpdateSnippet: SubmitHandler<FormData> = (data) => {
+    const updatedSnippet: Snippet = {
+      id: snippet!.id,
+      data,
+    };
+    console.log(updatedSnippet);
+    updateSnippet(updatedSnippet);
+  };
+
+  const handleEdit = () => {
+    setReadOnly(!readOnly);
+  };
+
+  const handleSave = () => {
+    setReadOnly(!readOnly);
+  };
+
+  useLocalStorage();
+
   return (
-    <div className="p-4 w-xl">
-      <Button
-        sx={{
-          position: "absolute",
-          top: "1rem",
-          right: "1rem",
-        }}
-        variant="contained"
-        className="absolute top-4 right-4"
-        onClick={handleBackSnippet}
-      >
-        Back to Snippets
-      </Button>
-      <Stack className="gap-3 mt-20 p-4">
-        <TextField
-          autoComplete="off"
-          id="outlined-basic name"
-          label="Name"
-          variant="outlined"
-          value={snippet?.data.name}
-          aria-readonly
-        />
-        <TextField
-          autoComplete="off"
-          id="outlined-basic name"
-          label="Snippet"
-          variant="outlined"
-          multiline
-          rows={15}
-          value={snippet?.data.snippet}
-          aria-readonly
-        />
-      </Stack>
+    <div className="w-xl">
+      <div className="absolute top-4 right-4 flex gap-2">
+        <Button
+          variant="contained"
+          onClick={handleCreateSnippet}
+          className="z-10"
+        >
+          Create Snippet
+        </Button>
+        <Button variant="contained" onClick={handleBackSnippet}>
+          Back to Snippets
+        </Button>
+      </div>
+      <form onSubmit={handleSubmit(handleUpdateSnippet)}>
+        <Stack className="gap-3 mt-20 mb-2">
+          <TextField
+            InputProps={{ readOnly: readOnly }}
+            autoComplete="off"
+            id="outlined-basic name"
+            label="Name"
+            variant="outlined"
+            {...register("name")}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+          />
+          <TextField
+            InputProps={{ readOnly: readOnly }}
+            autoComplete="off"
+            id="outlined-basic name"
+            label="Snippet"
+            variant="outlined"
+            multiline
+            rows={15}
+            {...register("snippet")}
+            error={!!errors.snippet}
+            helperText={errors.snippet?.message}
+          />
+        </Stack>
+        <Button
+          variant="contained"
+          onClick={readOnly ? handleEdit : handleSave}
+          type="submit"
+          disabled={!isValid}
+        >
+          {readOnly ? "Edit Snippet" : "Save Snippet"}
+        </Button>
+      </form>
     </div>
   );
 };

@@ -1,13 +1,18 @@
-import React, { useEffect } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Button, Stack, TextField, Typography } from "@mui/material";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schema } from "@/types/form.schema";
-import { useRouter } from "next/navigation";
-import { FormData } from "@/types/form";
-import useSnippetStore from "@/state/store";
-import { nanoid } from "nanoid";
-import { saveToLocal } from "@/utils/localStorage";
+import {
+  Typography,
+  Button,
+  Stack,
+  TextField,
+  useSnippetStore,
+  useRouter,
+  useLocalStorage,
+  useForm,
+  zodResolver,
+  schema,
+  SubmitHandler,
+  nanoid,
+  FormData,
+} from "./index";
 
 const CreateSnippet = () => {
   const router = useRouter();
@@ -20,7 +25,7 @@ const CreateSnippet = () => {
     resolver: zodResolver(schema),
   });
 
-  const { snippets, addSnippet } = useSnippetStore();
+  const { addSnippet } = useSnippetStore();
 
   const handleViewSnippet = () => {
     router.push("/snippets");
@@ -36,7 +41,7 @@ const CreateSnippet = () => {
     reset();
   };
 
-  useEffect(() => saveToLocal(snippets), [snippets]);
+  useLocalStorage();
 
   return (
     <div className="w-xl">

@@ -1,5 +1,4 @@
 import SnippetDetail from "@/components/SnippetDetail";
-import React from "react";
 
 const page = () => {
   return (

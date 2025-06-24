@@ -1,13 +1,16 @@
-import React, { memo } from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardActions from "@mui/material/CardActions";
-import { Snippet } from "@/types/snippet";
-import useSnippetStore from "@/state/store";
-import { useRouter } from "next/navigation";
+import {
+  memo,
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography,
+  Button,
+  CardActions,
+  useSnippetStore,
+  useLocalStorage,
+  useRouter,
+  Snippet,
+} from "./index";
 
 const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
   const {
@@ -25,6 +28,8 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
   const handleCardClick = (cardId: string) => {
     router.push(`/snippets/${cardId}`);
   };
+
+  useLocalStorage();
 
   return (
     <Card sx={{ maxWidth: 600 }}>
