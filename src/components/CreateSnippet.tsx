@@ -39,7 +39,7 @@ const CreateSnippet = () => {
   useEffect(() => saveToLocal(snippets), [snippets]);
 
   return (
-    <div>
+    <div className="w-xl">
       <Button
         sx={{
           position: "absolute",
@@ -52,10 +52,7 @@ const CreateSnippet = () => {
       >
         View Snippets
       </Button>
-      <form
-        onSubmit={handleSubmit(handleCreateSnippet)}
-        className="p-4 w-xl relative"
-      >
+      <form onSubmit={handleSubmit(handleCreateSnippet)} className="p-4 w-full">
         <Typography variant="h3" className="pb-6">
           Quick Snippets
         </Typography>

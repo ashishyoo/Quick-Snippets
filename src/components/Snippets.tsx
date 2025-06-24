@@ -2,7 +2,7 @@
 
 import React from "react";
 import SnippetCard from "@/components/SnippetCard";
-import { Stack, Typography, Button } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import useSnippetStore from "@/state/store";
 import { darkTheme, CssBaseline, ThemeProvider } from "../utils/index";
 import { useRouter } from "next/navigation";
@@ -11,22 +11,31 @@ const Snippets = () => {
   const router = useRouter();
   const { snippets } = useSnippetStore();
   const handleCreateSnippet = () => {
-    router.back();
+    router.push("/");
   };
 
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Stack className="gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
         <Button
           sx={{
-            position: "absolute",
-            top: "1rem",
+            position: "fixed",
+            top: {
+              xs: "auto",
+              sm: "1rem",
+              md: "1rem",
+            },
             right: "1rem",
+            bottom: {
+              xs: "1rem",
+              sm: "auto",
+              md: "auto",
+            },
           }}
           variant="contained"
-          className="absolute top-4 right-4"
           onClick={handleCreateSnippet}
+          className="z-10"
         >
           Create Snippet
         </Button>
@@ -37,7 +46,7 @@ const Snippets = () => {
         ) : (
           <Typography>No snippets available</Typography>
         )}
-      </Stack>
+      </div>
     </ThemeProvider>
   );
 };
