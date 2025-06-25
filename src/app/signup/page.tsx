@@ -1,12 +1,12 @@
-import CreateSnippet from "@/components/CreateSnippet";
+import SignUp from "@/components/SignUp";
 import React from "react";
 
-const HomePage = () => {
+const SignUpPage = () => {
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
-      <CreateSnippet />
+      <SignUp />
     </div>
   );
 };
 
-export default HomePage;
+export default SignUpPage;

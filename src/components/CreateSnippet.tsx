@@ -1,5 +1,6 @@
 "use client";
 
+import { auth } from "@/config/firebase.config";
 import {
   Typography,
   Button,
@@ -7,24 +8,27 @@ import {
   TextField,
   useSnippetStore,
   useRouter,
-  useLocalStorage,
   useForm,
   zodResolver,
-  schema,
+  formSchema,
   SubmitHandler,
   nanoid,
   FormData,
 } from "./index";
 
+import { signOut } from "firebase/auth";
+import useFetchSnippet from "@/hooks/useFetchSnippet";
+
 const CreateSnippet = () => {
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(formSchema),
   });
 
   const { addSnippet } = useSnippetStore();
@@ -43,22 +47,18 @@ const CreateSnippet = () => {
     reset();
   };
 
-  useLocalStorage();
+  useFetchSnippet();
 
   return (
     <div className="w-xl">
-      <Button
-        sx={{
-          position: "absolute",
-          top: "1rem",
-          right: "1rem",
-        }}
-        variant="contained"
-        className="absolute top-4 right-4"
-        onClick={handleViewSnippet}
-      >
-        View Snippets
-      </Button>
+      <div className="absolute top-3 right-3 flex gap-2">
+        <Button onClick={() => signOut(auth)} variant="contained">
+          Log out
+        </Button>
+        <Button variant="contained" onClick={handleViewSnippet}>
+          View Snippets
+        </Button>
+      </div>
       <form onSubmit={handleSubmit(handleCreateSnippet)} className="p-4 w-full">
         <Typography variant="h3" className="pb-6">
           Quick Snippets

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const schema = z.object({
+export const formSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
   snippet: z
     .string()

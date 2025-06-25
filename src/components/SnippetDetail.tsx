@@ -6,17 +6,17 @@ import {
   TextField,
   useSnippetStore,
   useRouter,
-  useLocalStorage,
   useForm,
   zodResolver,
-  schema,
   SubmitHandler,
   Snippet,
   FormData,
   useParams,
   useState,
   Button,
+  formSchema,
 } from "./index";
+import useFetchSnippet from "@/hooks/useFetchSnippet";
 
 const SnippetDetail = () => {
   const { id } = useParams();
@@ -46,7 +46,7 @@ const SnippetDetail = () => {
       name: snippet?.data.name,
       snippet: snippet?.data.snippet,
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(formSchema),
     mode: "onChange",
   });
 
@@ -67,7 +67,7 @@ const SnippetDetail = () => {
     setReadOnly(!readOnly);
   };
 
-  useLocalStorage();
+  useFetchSnippet();
 
   return (
     <div className="w-xl">

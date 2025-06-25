@@ -8,10 +8,10 @@ import {
   Button,
   CardActions,
   useSnippetStore,
-  useLocalStorage,
   useRouter,
   Snippet,
 } from "./index";
+import useFetchSnippet from "@/hooks/useFetchSnippet";
 
 const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
   const {
@@ -36,7 +36,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
     router.push(url);
   };
 
-  useLocalStorage();
+  useFetchSnippet();
 
   return (
     <Card className="w-full">
@@ -51,7 +51,7 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
         <Button size="small" color="error" onClick={() => handleRemove(id)}>
           Remove
         </Button>
-        <Button size="small" color="primary" onClick={() => handleEdit(id)}>
+        <Button size="small" color="warning" onClick={() => handleEdit(id)}>
           Edit
         </Button>
       </CardActions>
