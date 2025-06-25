@@ -14,6 +14,7 @@ interface SnippetState {
   addSnippet: (snippet: Snippet) => void;
   removeSnippet: (snippetId: string) => void;
   updateSnippet: (updatedSnippet: Snippet) => void;
+  resetSnippet: () => void;
 }
 
 const useSnippetStore = create<SnippetState>((set) => ({
@@ -29,6 +30,10 @@ const useSnippetStore = create<SnippetState>((set) => ({
       snippets: state.snippets.map((snippet) =>
         snippet.id === updatedSnippet.id ? updatedSnippet : snippet
       ),
+    })),
+  resetSnippet: () =>
+    set(() => ({
+      snippets: [],
     })),
 }));
 
