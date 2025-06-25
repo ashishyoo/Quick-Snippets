@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  Typography,
-  Button,
-  useSnippetStore,
-  useRouter,
-  useLocalStorage,
-} from "./index";
+import useFetchSnippet from "@/hooks/useFetchSnippet";
+import { Typography, Button, useSnippetStore, useRouter } from "./index";
 import SnippetCard from "./SnippetCard";
 
 const Snippets = () => {
@@ -21,10 +16,14 @@ const Snippets = () => {
     resetSnippet();
   };
 
-  useLocalStorage();
+  useFetchSnippet();
+
+  // if (loading) {
+  //   return <Typography>Loading</Typography>;
+  // }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+    <div>
       <Typography variant="h3" className="pb-4">
         All Snippets
       </Typography>
@@ -41,13 +40,15 @@ const Snippets = () => {
         </Button>
       </div>
 
-      {snippets.length > 0 ? (
-        snippets.map((snippet) => (
-          <SnippetCard key={snippet.id} snippet={snippet} />
-        ))
-      ) : (
-        <Typography>No snippets available</Typography>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+        {snippets.length > 0 ? (
+          snippets.map((snippet) => (
+            <SnippetCard key={snippet.id} snippet={snippet} />
+          ))
+        ) : (
+          <Typography>No snippets available</Typography>
+        )}
+      </div>
     </div>
   );
 };
